@@ -469,14 +469,17 @@ class Avanza:
             validated_result = SwedishStocks.model_validate(result)
             
             # Parse the response and add stocks to dictionary
-            for stock in validated_result.hits:
+            for stock in validated_result.stocks:
                 stocks_dict[stock.orderbookId] = stock.name
             
             # Check if we need to fetch more stocks
-            offset += len(validated_result.hits)
+            offset += len(validated_result.stocks)
+            
+            # Convert totalNumberOfOrderbooks to int if it's a string
+            total_stocks = int(validated_result.totalNumberOfOrderbooks) if isinstance(validated_result.totalNumberOfOrderbooks, str) else validated_result.totalNumberOfOrderbooks
             
             # Break if we've fetched all stocks or no more results
-            if offset >= validated_result.totalNumberOfHits or len(validated_result.hits) == 0:
+            if offset >= total_stocks or len(validated_result.stocks) == 0:
                 break
         
         return stocks_dict
