@@ -474,9 +474,7 @@ class Avanza:
             
             # Check if we need to fetch more stocks
             offset += len(validated_result.stocks)
-            
-            # Convert totalNumberOfOrderbooks to int if it's a string
-            total_stocks = int(validated_result.totalNumberOfOrderbooks) if isinstance(validated_result.totalNumberOfOrderbooks, str) else validated_result.totalNumberOfOrderbooks
+            total_stocks = int(validated_result.totalNumberOfOrderbooks)
             
             # Break if we've fetched all stocks or no more results
             if offset >= total_stocks or len(validated_result.stocks) == 0:
