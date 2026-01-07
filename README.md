@@ -89,6 +89,22 @@ result = avanza.place_order(
 )
 ```
 
+Get all Swedish stocks
+
+```python
+from avanza import Avanza
+
+avanza = Avanza({
+    'username': 'MY_USERNAME',
+    'password': 'MY_PASSWORD',
+    'totpSecret': 'MY_TOTP_SECRET'
+})
+
+# Get a dictionary of all Swedish stocks {orderbook_id: stock_name}
+stocks = avanza.get_swedish_stocks()
+# Returns: {"19002": "Investor B", "5269": "Volvo B", ...}
+```
+
 ## Testing
 
 Tests are stored in [/tests](https://github.com/Qluxzz/avanza/tree/master/tests)

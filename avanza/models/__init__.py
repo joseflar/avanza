@@ -20,6 +20,7 @@ from .overview import Overview
 from .price_alert import PriceAlert
 from .search_result import SearchResults
 from .stock_info import StockInfo
+from .swedish_stocks import SwedishStocks
 from .transaction import Transactions
 from .warrant_info import WarrantInfo
 from .watch_list import WatchList

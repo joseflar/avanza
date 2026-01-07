@@ -197,6 +197,22 @@ class ReturnModelTest(unittest.TestCase):
         except ValidationError as e:
             self.fail(e)
 
+    def test_get_swedish_stocks(self):
+        swedish_stocks = get_or_cache(self.avanza.get_swedish_stocks)
+
+        # Verify it's a dictionary
+        self.assertIsInstance(swedish_stocks, dict)
+        
+        # Verify it has content
+        self.assertGreater(len(swedish_stocks), 0)
+        
+        # Verify the structure (keys are stock IDs, values are stock names)
+        for stock_id, stock_name in swedish_stocks.items():
+            self.assertIsInstance(stock_id, str)
+            self.assertIsInstance(stock_name, str)
+            self.assertGreater(len(stock_id), 0)
+            self.assertGreater(len(stock_name), 0)
+
     def test_get_order_book(self):
         order_book = get_or_cache(
             self.avanza.get_order_book,

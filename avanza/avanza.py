@@ -438,6 +438,50 @@ class Avanza:
         )
         return result["hits"]
 
+    def get_swedish_stocks(self) -> Dict[str, str]:
+        """Get all Swedish stocks from the market stock filter
+
+        Returns:
+            A dictionary mapping orderbook IDs to stock names, e.g.,
+            {
+                "19002": "Investor B",
+                "5269": "Volvo B",
+                "5361": "Atlas Copco A",
+            }
+        """
+        stocks_dict = {}
+        offset = 0
+        limit = 1100
+        
+        while True:
+            options = {
+                "filter": {"sectors": [], "marketPlaces": ["se"]},
+                "offset": offset,
+                "limit": limit,
+                "sortBy": {"field": "numberOfOwners", "order": "desc"}
+            }
+            
+            result = self.__call(
+                HttpMethod.POST, Route.MARKET_STOCK_FILTER_PATH.value, options=options
+            )
+            
+            # Validate response against Pydantic model
+            validated_result = SwedishStocks.model_validate(result)
+            
+            # Parse the response and add stocks to dictionary
+            for stock in validated_result.stocks:
+                stocks_dict[stock.orderbookId] = stock.name
+            
+            # Check if we need to fetch more stocks
+            offset += len(validated_result.stocks)
+            total_stocks = int(validated_result.totalNumberOfOrderbooks)
+            
+            # Break if we've fetched all stocks or no more results
+            if offset >= total_stocks or len(validated_result.stocks) == 0:
+                break
+        
+        return stocks_dict
+
 
     def get_order_book(self, order_book_id: str)-> OrderBook:
         """Get info about an orderbook"""
