@@ -1,5 +1,5 @@
 from typing import List, Union
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class StockItem(BaseModel):
@@ -8,5 +8,5 @@ class StockItem(BaseModel):
 
 
 class SwedishStocks(BaseModel):
-    totalNumberOfOrderbooks: Union[int, str] = Field(alias="totalNumberOfOrderbooks")
+    totalNumberOfOrderbooks: Union[int, str]
     stocks: List[StockItem]
