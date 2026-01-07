@@ -465,16 +465,18 @@ class Avanza:
                 HttpMethod.POST, Route.MARKET_STOCK_FILTER_PATH.value, options=options
             )
             
+            # Validate response against Pydantic model
+            validated_result = SwedishStocks.model_validate(result)
+            
             # Parse the response and add stocks to dictionary
-            for stock in result.get("hits", []):
-                stocks_dict[stock["orderbookId"]] = stock["name"]
+            for stock in validated_result.hits:
+                stocks_dict[stock.orderbookId] = stock.name
             
             # Check if we need to fetch more stocks
-            total_hits = result.get("totalNumberOfHits", 0)
-            offset += len(result.get("hits", []))
+            offset += len(validated_result.hits)
             
             # Break if we've fetched all stocks or no more results
-            if offset >= total_hits or len(result.get("hits", [])) == 0:
+            if offset >= validated_result.totalNumberOfHits or len(validated_result.hits) == 0:
                 break
         
         return stocks_dict
